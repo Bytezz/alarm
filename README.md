@@ -56,3 +56,5 @@ make uninstall
 
 ## Notes
 Forked from [Birdie](https://github.com/Dejvino/birdie) which is forked from [Wake Mobile](https://gitlab.gnome.org/kailueke/wake-mobile), a proof-of-concept alarm app that uses systemd timers to wake up the system.
+
+Current icon is temporary and was kindly "stolen" from Furtherance.
