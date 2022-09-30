@@ -17,8 +17,8 @@ from subprocess import check_output
 os.chdir(os.path.dirname(sys.argv[0]))
 user_folder = str(Path.home()) + "/.config/systemd/user"
 
-APP_NAME = 'birdie'
-APP_ID = 'com.github.dejvino.birdie'
+APP_NAME = 'alarm'
+APP_ID = 'com.github.bytezz.alarm'
 VERSION = "0.2.1"
 LICENSE = Gtk.License.GPL_3_0
 
@@ -443,7 +443,7 @@ if USE_MPRIS:
           return False
 
       def get_desktop_entry(self) -> str:
-          return "com.github.dejvino.birdie"
+          return "com.github.bytezz.alarm"
 
       def can_fullscreen(self):
           return False

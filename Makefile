@@ -1,6 +1,6 @@
 CC	?= cc
-APP_NAME=birdie
-APP_ID=com.github.dejvino.birdie
+APP_NAME=alarm
+APP_ID=com.github.bytezz.alarm
 APP_VERSION=$(shell grep -P "VERSION = \"\d+.\d+.\d+\"" ${APP_NAME} | sed -E 's/.*"(.+)".*/\1/')
 
 set-user-alarm: set-user-alarm.c

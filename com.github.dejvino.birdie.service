@@ -1,3 +1,0 @@
-[D-BUS Service]
-Name=com.github.dejvino.birdie
-Exec=/usr/bin/birdie --gapplication-service

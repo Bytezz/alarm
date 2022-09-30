@@ -1,4 +1,4 @@
-# Birdie
+# Alarm
 Alarm app designed for Linux phones.
 
 Tested with PINE64 PinePhone running Phosh.
@@ -18,7 +18,7 @@ Open [Screenshots Gallery](./screenshots/README.md) for more images.
 - alarm accessible from a lockscreen (via MPRIS)
 - landscape and portrait mode layouts
 
-![Logo](com.github.dejvino.birdie.png)
+![Logo](com.github.bytezz.alarm.png)
 
 ## Todo
 - New icon to follow GNOME HIG
@@ -31,8 +31,8 @@ Open [Screenshots Gallery](./screenshots/README.md) for more images.
 
 ```
 # get the source
-git clone https://github.com/Dejvino/birdie.git
-cd birdie
+git clone https://github.com/bytezz/alarm.git
+cd alarm
 
 # on Mobian/Debian:
 sudo apt install gcc make checkinstall python3-psutil python3-pip
@@ -53,7 +53,7 @@ sudo make install
 
 ```
 # on Mobian/Debian:
-sudo dpkg -r birdie
+sudo dpkg -r alarm
 
 # or generic:
 make uninstall

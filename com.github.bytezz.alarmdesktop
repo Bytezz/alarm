@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Birdie
+Name=Alarm
 Comment=Wakeup Alarm
 Keywords=time;timer;alarm;
-Exec=birdie
-Icon=com.github.dejvino.birdie
+Exec=alarm
+Icon=com.github.bytezz.alarm
 Terminal=false
 Type=Application
 Categories=GNOME;GTK;Utility;Clock;
