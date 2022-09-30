@@ -1,11 +1,8 @@
-# Alarm
-Alarm app designed for Linux phones.
-
+# Alarm ![Logo](com.github.bytezz.alarm.png)
+Alarm app designed for Linux phones.  
 Tested with PINE64 PinePhone running Phosh.
 
-![Screenshot](screenshots/default.png)
-
-Open [Screenshots Gallery](./screenshots/README.md) for more images.
+[Screenshots Gallery](./screenshots/README.md)
 
 ## Features
 - system wakes up from power saving mode (suspend) to play the alarm
@@ -18,8 +15,6 @@ Open [Screenshots Gallery](./screenshots/README.md) for more images.
 - alarm accessible from a lockscreen (via MPRIS)
 - landscape and portrait mode layouts
 
-![Logo](com.github.bytezz.alarm.png)
-
 ## Todo
 - New icon to follow GNOME HIG
 - New UI to follow GNOME HIG
@@ -27,7 +22,7 @@ Open [Screenshots Gallery](./screenshots/README.md) for more images.
 
 ## Install
 
-## Install from source:
+### Install from source:
 
 ```
 # get the source
@@ -59,5 +54,5 @@ sudo dpkg -r alarm
 make uninstall
 ```
 
-# Notes
+## Notes
 Forked from [Birdie](https://github.com/Dejvino/birdie) which is forked from [Wake Mobile](https://gitlab.gnome.org/kailueke/wake-mobile), a proof-of-concept alarm app that uses systemd timers to wake up the system.
