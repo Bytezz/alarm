@@ -20,15 +20,12 @@ Open [Screenshots Gallery](./screenshots/README.md) for more images.
 
 ![Logo](com.github.dejvino.birdie.png)
 
+## Todo
+- New icon to follow GNOME HIG
+- New UI to follow GNOME HIG
+- New screenshots
+
 ## Install
-
-### Arch Linux
-
-Available on [AUR](https://aur.archlinux.org/) as [birdie-alarm-mobile-git](https://aur.archlinux.org/packages/birdie-alarm-mobile-git/). Use your AUR wrapper of choice, e.g.:
-
-```
-yay -S birdie-alarm-mobile-git
-```
 
 ## Install from source:
 
@@ -63,8 +60,4 @@ make uninstall
 ```
 
 # Notes
-Forked from [Wake Mobile](https://gitlab.gnome.org/kailueke/wake-mobile), a proof-of-concept alarm app that uses systemd timers to wake up the system.
-
-Logo icon adapted from [freesvg.org #1](https://freesvg.org/1526107263) and [freesvg.org #2](https://freesvg.org/1552814098) (Public Domain).
-
-Alarm sound is a custom recording, released into Public Domain.
+Forked from [Birdie](https://github.com/Dejvino/birdie) which is forked from [Wake Mobile](https://gitlab.gnome.org/kailueke/wake-mobile), a proof-of-concept alarm app that uses systemd timers to wake up the system.
