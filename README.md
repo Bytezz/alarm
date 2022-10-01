@@ -1,4 +1,4 @@
-# Alarm ![Logo](com.github.bytezz.alarm.png)
+# Alarm <img src="com.github.bytezz.alarm.svg" height=32em />
 Alarm app designed for Linux phones.  
 Tested with PINE64 PinePhone running Phosh.
 
