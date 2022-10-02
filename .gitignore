@@ -2,3 +2,4 @@ set-user-alarm
 *.deb
 description-pak
 *.ui~
+*.old
