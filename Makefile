@@ -24,7 +24,7 @@ install: set-user-alarm
 	install -D -o root -g root -m 755 play-alarm-sound ${DESTDIR}/usr/lib/${APP_NAME}/libexec/play-alarm-sound
 	install -D -o root -g root -m 755 ${APP_NAME} ${DESTDIR}/usr/bin/${APP_NAME}
 	install -D -o root -g root -m 644 app.ui ${DESTDIR}/usr/share/${APP_NAME}/app.ui
-	install -D -o root -g root -m 644 splashes.ogg ${DESTDIR}/usr/share/${APP_NAME}/splashes.ogg
+	install -D -o root -g root -m 644 alarm.ogg ${DESTDIR}/usr/share/${APP_NAME}/alarm.ogg
 	install -D -o root -g root -m 644 ${APP_ID}.desktop ${DESTDIR}/usr/share/applications/${APP_ID}.desktop
 	install -D -o root -g root -m 644 ${APP_ID}.service ${DESTDIR}/usr/share/dbus-1/services/${APP_ID}.service
 	install -D -o root -g root -m 644 ${APP_ID}.svg ${DESTDIR}/usr/share/icons/hicolor/scalable/apps/${APP_ID}.svg
