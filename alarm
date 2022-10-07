@@ -7,7 +7,8 @@
 
 import gi # Debian package: python3-gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk, Gio, GLib # Debian package: gir1.2-glib-2.0, gir1.2-gtk-3.0
+gi.require_version('Handy', '1')
+from gi.repository import Gtk, Gio, GLib, Handy # Debian package: gir1.2-glib-2.0, gir1.2-gtk-3.0
 import os, sys, signal
 import psutil # Debian package: python3-psutil
 from subprocess import Popen, PIPE
@@ -64,6 +65,7 @@ class AlarmApp(Gtk.Application):
   snooze_long = 10
 
   def __init__(self, application_id):
+    Handy.init()
     Gtk.Application.__init__(self, application_id=application_id)
 
   def register_event_handler(self, event_handler):
@@ -97,8 +99,8 @@ class AlarmApp(Gtk.Application):
     self.window = self.builder.get_object("appwindow")
     self.window.set_application(self)
     self.mainbox = self.builder.get_object("mainbox")
-    self.errorlabel = self.builder.get_object("error")
-    self.errorlabel.set_label(MSG_START)
+    #self.errorlabel = self.builder.get_object("error")
+    #self.errorlabel.set_label(MSG_START)
     self.setwakebutton = self.builder.get_object("setwake")
     self.cancelbutton = self.builder.get_object("cancel")
     self.snoozebutton = self.builder.get_object("snooze")
@@ -125,7 +127,7 @@ class AlarmApp(Gtk.Application):
           self.set_enabled_day_of_week(day, True if alarm_days[day] == '1' else False)
       volume_var = int(content.split("Set-Volume=")[1].split("\n")[0])
       if volume_var == -1:
-        self.volumeoption.set_active(False)
+        self.volumeoption.set_enable_expansion(False)
       else:
         self.soundvolume.set_value(volume_var)
     except Exception as e:
@@ -153,7 +155,7 @@ class AlarmApp(Gtk.Application):
     self.alarm_set = False
     self.end_alarm()
     self.disable_elements(False)
-    self.errorlabel.set_label(MSG_START)
+    #self.errorlabel.set_label(MSG_START)
     self.gen_user_timer(dummy_time)
     print("Disabling alarm service")
     check_output(["systemctl", "--user", "daemon-reload"]) # Debian package: systemd
@@ -165,7 +167,7 @@ class AlarmApp(Gtk.Application):
     self.alarm_set = True
     self.window.set_sensitive(False)
     self.disable_elements(True)
-    self.errorlabel.set_markup(MSG_SCHEDULING_ALARM)
+    #self.errorlabel.set_markup(MSG_SCHEDULING_ALARM)
     # TODO: spawn as async task
     print("Enabling alarm service")
     try:
@@ -175,11 +177,11 @@ class AlarmApp(Gtk.Application):
         self.gen_user_service()
         self.gen_user_timer(time_var)
         self.load_user_timer()
-      self.errorlabel.set_label(MSG_ALARM_SET)
+      #self.errorlabel.set_label(MSG_ALARM_SET)
       print(f"Alarm set for {self.alarmtime.format('%Y-%m-%d %H:%M:%S')}")
     except Exception as e:
       print(e)
-      self.errorlabel.set_markup(MSG_SET_ALARM_ERROR)
+      #self.errorlabel.set_markup(MSG_SET_ALARM_ERROR)
       self.alarm_set = False
       self.disable_elements(False)
     self.window.set_sensitive(True)
@@ -248,7 +250,7 @@ class AlarmApp(Gtk.Application):
     self.cancelbutton.set_sensitive(True)
     self.snoozebutton.set_sensitive(True)
     try:
-      if self.volumeoption.get_active():
+      if self.volumeoption.get_enable_expansion():
         try:
           first_sink = str(check_output(["sh", "-c", "LANGUAGE=C pactl list| grep -m 1 Sink | cut -d '#' -f 2"]), "utf-8").split("\n")[0]
           check_output(["pactl", "set-sink-mute", first_sink, "0"])
@@ -257,13 +259,13 @@ class AlarmApp(Gtk.Application):
           print(e)
       print("Spawning alarm sound app")
       self.alarm_proc = Popen((INHIBIT_COMMAND_PREFIX if USE_INHIBIT else []) + ALARM_SOUND_COMMAND)
-      self.errorlabel.set_label(MSG_WAKE_UP)
+      #self.errorlabel.set_label(MSG_WAKE_UP)
       self.lefttime.set_label(MSG_NO_TIME_LEFT)
       if self.event_handler:
         self.event_handler.event_start()
     except Exception as e:
       print(e)
-      self.errorlabel.set_label(MSG_PLAY_ALARM_ERROR)
+      #self.errorlabel.set_label(MSG_PLAY_ALARM_ERROR)
 
   def end_alarm(self):
     if self.alarm_proc != 0:
@@ -273,7 +275,7 @@ class AlarmApp(Gtk.Application):
         for child in children:
           os.kill(child.pid, signal.SIGTERM)
         self.alarm_proc.terminate()
-        self.errorlabel.set_label(MSG_START)
+        #self.errorlabel.set_label(MSG_START)
       except Exception as e:
         print(e)
       self.alarm_proc = 0
@@ -392,7 +394,7 @@ ExecStart=gapplication launch {APP_ID}
 
   def gen_user_timer(self, time_arg):
     # TODO: Is "Persistent=true" really needed for race safety?
-    volume_setting = int(self.volumescale.get_value()) if self.volumeoption.get_active() else -1
+    volume_setting = int(self.volumescale.get_value()) if self.volumeoption.get_enable_expansion() else -1
     if self.prev_alarm:
       prev_alarm_found = self.prev_alarm.format("%Y-%m-%d %H:%M:%S")
     else:
