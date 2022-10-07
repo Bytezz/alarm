@@ -21,7 +21,7 @@ user_folder = str(Path.home()) + "/.config/systemd/user"
 
 APP_NAME = 'alarm'
 APP_ID = 'com.github.bytezz.alarm'
-VERSION = "0.2.1"
+VERSION = "0.5.0"
 LICENSE = Gtk.License.GPL_3_0
 
 UI_FILE_LOCAL = "./app.ui"
