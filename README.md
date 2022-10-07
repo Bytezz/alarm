@@ -19,10 +19,18 @@ Tested with PINE64 PinePhone running Phosh.
 - New icon to follow GNOME HIG
 - New UI to follow GNOME HIG
 - New screenshots
+- Packaging
+- - Deb
+- - Rpm
+- - Apk
+- - Flatpak
+- - Snap
+- Port to Gtk 4
+- Convert to C?
 
 ## Install
 
-### Install from source:
+### Install from source
 
 ```
 # get the source
@@ -44,7 +52,7 @@ pip3 install -r requirements.txt
 sudo make install
 ```
 
-## Uninstall:
+## Uninstall
 
 ```
 # on Mobian/Debian:
