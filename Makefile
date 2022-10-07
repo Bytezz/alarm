@@ -1,7 +1,34 @@
-CC	?= cc
-APP_NAME=alarm
-APP_ID=com.github.bytezz.alarm
-APP_VERSION=$(shell grep -P "VERSION = \"\d+.\d+.\d+\"" ${APP_NAME} | sed -E 's/.*"(.+)".*/\1/')
+#!/usr/bin/make
+
+SHELL = /bin/sh
+
+APP_NAME     = alarm
+APP_ID       = com.github.bytezz.alarm
+program      = alarm
+package_name = alarm
+description  = Alarm App for GNOME which wakes from suspend
+APP_VERSION  = $(shell grep -P "VERSION = \"\d+.\d+.\d+\"" ${APP_NAME} | sed -E 's/.*"(.+)".*/\1/')
+
+CC ?= gcc
+
+MAKE ?= make
+
+INSTALL ?= install
+INSTALL_PROGRAM = $(INSTALL) -D -o $(USER) -g $(USER) -m 755
+INSTALL_DATA    = $(INSTALL) -D -o $(USER) -g $(USER) -m 644
+
+srcdir = src
+
+TMPDIR ?= /tmp
+prefix = /usr
+exec_prefix = $(prefix)
+bindir = $(exec_prefix)/bin
+datarootdir = $(prefix)/share
+datadir = $(datarootdir)/$(APP_NAME)
+docdir = $(datarootdir)/doc/$(APP_NAME)
+sysconfdir = /etc
+hicolordir = /usr/share/icons/hicolor
+applicationsdir = /usr/share/applications
 
 set-user-alarm: set-user-alarm.c
 	$(CC) ${CFLAGS} ${LDFLAGS} -o set-user-alarm set-user-alarm.c
@@ -14,34 +41,29 @@ check: set-user-alarm.c
 
 
 install: set-user-alarm
-	ls -lah ${DESTDIR}
-	mkdir -p ${DESTDIR}/usr/lib/${APP_NAME}
-	mkdir -p ${DESTDIR}/usr/lib/${APP_NAME}/libexec
-	mkdir -p ${DESTDIR}/usr/share/${APP_NAME}
-	install -D -o root -g root -m 644 system-wake-up.service ${DESTDIR}/lib/systemd/system/system-wake-up.service
-	install -D -o root -g root -m 644 system-wake-up.timer ${DESTDIR}/lib/systemd/system/system-wake-up.timer
+	$(INSTALL_DATA) system-wake-up.service ${DESTDIR}/lib/systemd/system/system-wake-up.service
+	$(INSTALL_DATA) system-wake-up.timer ${DESTDIR}/lib/systemd/system/system-wake-up.timer
 	install -D -o root -g root -m 4755 set-user-alarm ${DESTDIR}/usr/lib/${APP_NAME}/libexec/set-user-alarm
-	install -D -o root -g root -m 755 play-alarm-sound ${DESTDIR}/usr/lib/${APP_NAME}/libexec/play-alarm-sound
-	install -D -o root -g root -m 755 ${APP_NAME} ${DESTDIR}/usr/bin/${APP_NAME}
-	install -D -o root -g root -m 644 app.ui ${DESTDIR}/usr/share/${APP_NAME}/app.ui
-	install -D -o root -g root -m 644 alarm.ogg ${DESTDIR}/usr/share/${APP_NAME}/alarm.ogg
-	install -D -o root -g root -m 644 ${APP_ID}.desktop ${DESTDIR}/usr/share/applications/${APP_ID}.desktop
-	install -D -o root -g root -m 644 ${APP_ID}.service ${DESTDIR}/usr/share/dbus-1/services/${APP_ID}.service
-	install -D -o root -g root -m 644 ${APP_ID}.svg ${DESTDIR}/usr/share/icons/hicolor/scalable/apps/${APP_ID}.svg
-	touch ${DESTDIR}/usr/share/icons/hicolor
+	$(INSTALL_PROGRAM) play-alarm-sound ${DESTDIR}/usr/lib/${APP_NAME}/libexec/play-alarm-sound
+	$(INSTALL_PROGRAM) ${APP_NAME} ${DESTDIR}${bindir}/${APP_NAME}
+	$(INSTALL_DATA) app.ui ${DESTDIR}${datadir}/app.ui
+	$(INSTALL_DATA) alarm.ogg ${DESTDIR}${datadir}/alarm.ogg
+	$(INSTALL_DATA) ${APP_ID}.desktop ${DESTDIR}$(applicationsdir)/${APP_ID}.desktop
+	$(INSTALL_DATA) ${APP_ID}.service ${DESTDIR}/usr/share/dbus-1/services/${APP_ID}.service
+	$(INSTALL_DATA) ${APP_ID}.svg ${DESTDIR}${hicolordir}/scalable/apps/${APP_ID}.svg
 	gtk-update-icon-cache
 
 uninstall:
-	rm /lib/systemd/system/system-wake-up.service
-	rm /lib/systemd/system/system-wake-up.timer
-	rm /lib/systemd/system/timers.target.wants/system-wake-up.timer
-	rm /usr/bin/set-user-alarm
-	rm /usr/bin/${APP_NAME}
-	rm -rf /usr/lib/${APP_NAME}
-	rm -rf /usr/share/${APP_NAME}
-	rm /usr/share/applications/${APP_ID}.desktop
-	rm /usr/share/dbus-1/services/${APP_ID}.service
-	rm /usr/share/icons/hicolor/scalable/apps/${APP_ID}.svg
+	rm -rf ${DESTDIR}/lib/systemd/system/system-wake-up.service
+	rm -rf ${DESTDIR}/lib/systemd/system/system-wake-up.timer
+	rm -rf ${DESTDIR}/lib/systemd/system/timers.target.wants/system-wake-up.timer
+	rm -rf ${DESTDIR}${bindir}/set-user-alarm
+	rm -rf ${DESTDIR}${bindir}/${APP_NAME}
+	rm -rf ${DESTDIR}/usr/lib/${APP_NAME}
+	rm -rf ${DESTDIR}${datadir}
+	rm -rf ${DESTDIR}${applicationsdir}/${APP_ID}.desktop
+	rm -rf ${DESTDIR}/usr/share/dbus-1/services/${APP_ID}.service
+	rm -rf ${DESTDIR}${hicolordir}/scalable/apps/${APP_ID}.svg
 
 clean:
 	rm -f set-user-alarm
