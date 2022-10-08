@@ -46,16 +46,28 @@
           </packing>
         </child>
         <child>
-          <object class="GtkSwitch" id="setwake">
-            <property name="visible">True</property>
-            <property name="can-focus">True</property>
-            <property name="halign">start</property>
-            <property name="margin-top">2</property>
-            <property name="hexpand">True</property>
-            <signal name="state-set" handler="set_wake_clicked" swapped="no"/>
+          <object class="GtkButton" id="schedule">
+            <property name="label" translatable="yes">Schedule</property>
+            <signal name="clicked" handler="schedule_clicked" swapped="no"/>
+            <style>
+              <class name="suggested-action"/>
+            </style>
           </object>
           <packing>
             <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="unschedule">
+            <property name="label" translatable="yes">Unschedule</property>
+            <property name="visible">False</property>
+            <signal name="clicked" handler="unschedule_clicked" swapped="no"/>
+            <style>
+              <class name="destructive-action"/>
+            </style>
+          </object>
+          <packing>
+            <property name="position">2</property>
           </packing>
         </child>
       </object>

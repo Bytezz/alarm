@@ -101,18 +101,21 @@ class AlarmApp(Gtk.Application):
     self.mainbox = self.builder.get_object("mainbox")
     #self.errorlabel = self.builder.get_object("error")
     #self.errorlabel.set_label(MSG_START)
-    self.setwakebutton = self.builder.get_object("setwake")
+    self.schedulebutton = self.builder.get_object("schedule")
+    self.unschedulebutton = self.builder.get_object("unschedule")
     self.cancelbutton = self.builder.get_object("cancel")
     self.snoozebutton = self.builder.get_object("snooze")
     self.update_layout()
     self.window.show_all()
+    self.unschedulebutton.set_visible(False)
     try:
       with open(user_folder + "/wake-up.timer", "r") as f:
         content = f.read()
       time_var = content.split("OnCalendar=")[1].split("\n")[0]
       if time_var != dummy_time:
         self.set_alarm_time(GLib.DateTime.new_from_iso8601(time_var, default_tz=GLib.TimeZone.new_local()))
-        self.setwakebutton.set_active(True)
+        self.schedulebutton.set_visible(False)
+        self.unschedulebutton.set_visible(True)
         self.set_alarm(rewrite=False)
       try:
         prev_alarm_found = content.split("Previous-Alarm=")[1].split("\n")[0]
@@ -160,6 +163,8 @@ class AlarmApp(Gtk.Application):
     print("Disabling alarm service")
     check_output(["systemctl", "--user", "daemon-reload"]) # Debian package: systemd
     check_output(["systemctl", "--user", "disable", "--now", "wake-up.timer"])
+    self.schedulebutton.set_visible(True)
+    self.unschedulebutton.set_visible(False)
     self.run_set_user_alarm()
     self.update()
 
@@ -179,6 +184,8 @@ class AlarmApp(Gtk.Application):
         self.load_user_timer()
       #self.errorlabel.set_label(MSG_ALARM_SET)
       print(f"Alarm set for {self.alarmtime.format('%Y-%m-%d %H:%M:%S')}")
+      self.schedulebutton.set_visible(False)
+      self.unschedulebutton.set_visible(True)
     except Exception as e:
       print(e)
       #self.errorlabel.set_markup(MSG_SET_ALARM_ERROR)
@@ -293,15 +300,14 @@ class AlarmApp(Gtk.Application):
     if self.prev_alarm is not None and not was_testing:
       # restore the initial alarm time after snoozing
       self.set_alarm_time(self.prev_alarm)
-    if self.setwakebutton.get_active():
+    if not self.schedulebutton.get_visible():
       self.enable_alarm()
     self.update()
 
-  def set_wake_clicked(self, button, state):
-    if state:
-      self.enable_alarm()
-    else:
-      self.disable_alarm()
+  def schedule_clicked(self, button):
+    self.enable_alarm()
+  def unschedule_clicked(self, button):
+    self.disable_alarm()
 
   def disable_elements(self, val):
     self.cancelbutton.set_sensitive(False)
