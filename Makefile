@@ -48,6 +48,7 @@ install: set-user-alarm
 	$(INSTALL_PROGRAM) ${APP_NAME} ${DESTDIR}${bindir}/${APP_NAME}
 	$(INSTALL_DATA) app.ui ${DESTDIR}${datadir}/app.ui
 	$(INSTALL_DATA) alarm.ogg ${DESTDIR}${datadir}/alarm.ogg
+	$(INSTALL_DATA) copyright ${DESTDIR}${docdir}/copyright
 	$(INSTALL_DATA) ${APP_ID}.desktop ${DESTDIR}$(applicationsdir)/${APP_ID}.desktop
 	$(INSTALL_DATA) ${APP_ID}.service ${DESTDIR}/usr/share/dbus-1/services/${APP_ID}.service
 	$(INSTALL_DATA) ${APP_ID}.svg ${DESTDIR}${hicolordir}/scalable/apps/${APP_ID}.svg
@@ -61,6 +62,7 @@ uninstall:
 	rm -rf ${DESTDIR}${bindir}/${APP_NAME}
 	rm -rf ${DESTDIR}/usr/lib/${APP_NAME}
 	rm -rf ${DESTDIR}${datadir}
+	rm -rf ${DESTDIR}${docdir}
 	rm -rf ${DESTDIR}${applicationsdir}/${APP_ID}.desktop
 	rm -rf ${DESTDIR}/usr/share/dbus-1/services/${APP_ID}.service
 	rm -rf ${DESTDIR}${hicolordir}/scalable/apps/${APP_ID}.svg
