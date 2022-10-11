@@ -397,7 +397,7 @@ class AlarmApp(Gtk.Application):
     content = f"""[Unit]
 Description=User Wake Up Action
 [Service]
-ExecStart={APP_NAME} 
+ExecStart={__file__}
 """
     with open(user_folder + "/wake-up.service", "w") as f:
       f.write(content)
