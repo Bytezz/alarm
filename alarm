@@ -13,6 +13,7 @@ import os, sys, signal
 import psutil # Debian package: python3-psutil
 from subprocess import Popen, PIPE
 from pathlib import Path
+import _thread as thread
 
 from subprocess import check_output
 
@@ -152,9 +153,9 @@ class AlarmApp(Gtk.Application):
       return
     self.alarmtime = alarmtime
     self.prev_alarm = self.alarmtime
-    self.set_alarm()
+    thread.start_new_thread(self.set_alarm, ())
 
-  def disable_alarm(self):
+  def _disable_alarm(self):
     self.alarm_set = False
     self.end_alarm()
     self.disable_elements(False)
@@ -167,6 +168,9 @@ class AlarmApp(Gtk.Application):
     self.unschedulebutton.set_visible(False)
     self.run_set_user_alarm()
     self.update()
+
+  def disable_alarm(self):
+    thread.start_new_thread(self._disable_alarm, ())
 
   def set_alarm(self, rewrite=True):
     self.alarm_set = True
