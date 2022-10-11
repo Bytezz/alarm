@@ -30,6 +30,8 @@ sysconfdir = /etc
 hicolordir = /usr/share/icons/hicolor
 applicationsdir = /usr/share/applications
 
+all: set-user-alarm
+
 set-user-alarm: set-user-alarm.c
 	$(CC) ${CFLAGS} ${LDFLAGS} -o set-user-alarm set-user-alarm.c
 
@@ -40,7 +42,7 @@ check: set-user-alarm.c
 	rm out.o
 
 
-install: set-user-alarm
+install: all
 	$(INSTALL_DATA) system-wake-up.service ${DESTDIR}/lib/systemd/system/system-wake-up.service
 	$(INSTALL_DATA) system-wake-up.timer ${DESTDIR}/lib/systemd/system/system-wake-up.timer
 	install -D -o root -g root -m 4755 set-user-alarm ${DESTDIR}/usr/lib/${APP_NAME}/libexec/set-user-alarm
@@ -72,3 +74,22 @@ clean:
 
 install-deb: set-user-alarm
 	checkinstall "--requires=systemd, pulseaudio-utils, libglib2.0-bin, python3-psutil, python3-gi, gir1.2-glib-2.0, gir1.2-gtk-3.0" --pkgname=${APP_NAME} --pkglicense=GPL-2+ --nodoc --pkgversion=${APP_VERSION} --pkgrelease=0 --include=listfile --deldesc=yes --backup=no -y
+
+dist:
+	rm -rf $(TMPDIR)/$(APP_NAME)-$(APP_VERSION)
+	cp -r . $(TMPDIR)/$(APP_NAME)-$(APP_VERSION)
+	tar -cf $(APP_NAME)-$(APP_VERSION).tar --directory=$(TMPDIR) $(APP_NAME)-$(APP_VERSION)
+	gzip $(APP_NAME)-$(APP_VERSION).tar
+	rm -rf $(TMPDIR)/$(APP_NAME)-$(APP_VERSION)
+
+dist-deb: all
+	rm -rf debian
+	mkdir debian
+	$(MAKE) DESTDIR=./debian prefix=/usr install
+	mkdir debian/DEBIAN
+	cp build-aux/debiancontrol debian/DEBIAN/control
+	sed -i "s/Package: /Package: $(package_name)/" debian/DEBIAN/control
+	sed -i "s/Version: /Version: $(APP_VERSION)/" debian/DEBIAN/control
+	sed -i "s/Architecture: /Architecture: `uname -m | sed "s/x86_64/amd64/" | sed "s/aarch64/arm64/"`/" debian/DEBIAN/control
+	sed -i "s/Description: /Description: $(APP_NAME)\n $(description)/" debian/DEBIAN/control
+	dpkg-deb -b debian $(APP_NAME)-$(APP_VERSION)-`uname -m`.deb

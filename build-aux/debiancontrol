@@ -1,0 +1,6 @@
+Package: 
+Version: 
+Maintainer: Bytez https://github.com/bytezz
+Architecture: 
+Depends: python3, systemd, pulseaudio-utils, libglib2.0-bin, python3-psutil, python3-gi, gir1.2-glib-2.0, gir1.2-gtk-3.0
+Description: 
